@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+	<meta charset="utf-8">	
+	<title>Necronomicom</title>
+
+    <Style>
+        
+
+        body {
+            background-color: #222;
+            text-align: center;
+        }
+
+        .plataforma {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            height: 562px;
+            width:509px;
+            background-image: url('img/capa.png');
+            background-size: 100%;
+            background-repeat: no-repeat;
+        }
+
+        
+
+        .flip-container {            
+            perspective: 1000px;
+            background-color: blueviolet;
+            position: relative;
+            top: 285px;
+            left: 25px;
+        }
+
+        .flipper{
+            height: 100%;
+            width: 100%;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+            position: relative;
+            
+        }
+
+        #medalhaf, #medalhav{
+            
+            height: 110px;
+            border-radius: 50%;
+            
+
+        }
+
+        #medalhaf #medalhav {
+            transform: rotate(180deg);
+            transition: 0.8s;
+        }
+
+        #switch:checked ~ .flip-container .flipper {
+        transform: rotatey(180deg);
+        }
+
+        .front, .back{
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+        }
+
+
+        .back{
+            transform: rotatey(180deg);
+        }
+
+        #switch{
+            display: none;
+        }
+
+        #medalhaf:hover, #medalhav:hover {
+            box-shadow: 1px 1px 1px 1px darkmagenta;
+        }
+
+        .painelE {
+            text-align: center;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            
+            bottom: 10px;
+            background-color: #222;
+            width: 90%;
+        }
+
+        .painelI {
+            width: 300px;
+            margin: auto;
+        }
+
+        #segredo {
+            position: absolute;
+            width: 100%;
+            z-index:1;
+            
+            
+        }
+
+        #img1_segredo {
+            width: 300px;
+            float:left;
+            margin-left: 100px;
+            display: none;
+            
+            
+            
+        }
+
+        #img2_segredo {
+            width: 300px;
+            float:right;
+            margin-right: 100px;
+            display: none;
+        }
+
+        
+
+        
+        
+    </Style>
+</head>
+<body>
+    <div class="plataforma">
+        
+        
+        <input type="checkbox" id="switch" />
+        <label class="flip-container" for="switch" >
+                <div class="flipper">
+                    <div class="front">
+                        <img id="medalhaf" src="img/frente1.png">
+                    </div>
+                    <div class="back">
+                        <img id="medalhav" src="img/verso1.jpg">
+                    </div>
+                </div>
+        </label>
+    </div>
+    </label>
+    <div id="segredo">
+        <img id="img1_segredo" src="img/HP.png">
+        <img id="img2_segredo" src="img/garotinha.png">
+    </div>
+
+    <section class="painelE">
+        <div class="painelI">
+            <button onclick="recuar()">&#9664</button>
+            <button onclick="avancar()">&#9654</button>
+        </div>
+    </section>
+</body>
+
+
+<script>
+    //audio de fundo
+    function somDeFundo(){
+        const music = new Audio('sons/horror.mp3');
+        music.play();
+    }
+
+    // estado inicial da aplicação e controles de laço
+    indice = 2
+    chave = 2
+    chaveMaximo = 5
+    chaveMinimo = 1
+    face = 1
+    segredo = chave * face
+
+     // Altera o estado da medalha
+    function avancar() {
+        indice++
+        chave++        
+        if(chave > chaveMaximo){
+          chave=chaveMinimo;
+        } 
+        segredo = chave * face               
+        posicao()
+        gatilho()        
+        
+    }
+
+    function recuar() {
+        indice--
+        chave--        
+        if(chave < chaveMinimo){
+          chave=chaveMaximo;
+        }
+        segredo = chave * face
+        posicao()
+        gatilho()
+        
+        
+    }
+
+    // atualiza o medalha da tela    
+
+
+    function posicao() {
+        var giraf = document.getElementById('medalhaf'); //localiza o elemento frente
+        giraf.style.transform = 'rotate('+72*indice+'deg)';//rotação da medalha
+        giraf.style.transition = '0.8s'; // tempo de transição do giro
+        var girav = document.getElementById('medalhav'); //localiza o elemento verso
+        girav.style.transform = 'rotate('+72*indice+'deg)';
+        girav.style.transition = '0.8s';
+    }
+
+    //gatilho do segredo
+
+    function gatilho() {
+        if(segredo == -5) {
+            somDeFundo()
+            face = 10
+            if(indice == 0) {
+                var susto = document.getElementById('img2_segredo'); //localiza o elemento frente
+                susto.style.display = 'block';//aparece
+            } else {
+                var susto = document.getElementById('img1_segredo'); //localiza o elemento frente
+                susto.style.display = 'block';//aparece
+            }
+        }
+    }
+
+    //controle da face da medalha
+
+    function controleFace() {        
+        face = face * (-1)
+    }
+
+    
+
+    document.getElementById('switch').addEventListener('click',controleFace,)
+
+    //Posição Inicial da medalha
+    posicao()
+    alert('Utilize fones, para uma melhor experiência...')
+    
+    
+</script>
+</html>
